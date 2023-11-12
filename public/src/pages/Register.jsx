@@ -17,10 +17,14 @@ export default function Register() {
     theme: "dark",
   };
   const [values, setValues] = useState({
-    username: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
     email: "",
     password: "",
     confirmPassword: "",
+    currentMode: "",
+    account: "",
   });
 
   useEffect(() => {
@@ -30,45 +34,79 @@ export default function Register() {
   }, []);
 
   const handleChange = (event) => {
+    debugger;
     setValues({ ...values, [event.target.name]: event.target.value });
   };
 
   const handleValidation = () => {
-    const { password, confirmPassword, username, email } = values;
+    const { 
+      password, 
+      confirmPassword,
+      firstName,
+      lastName,
+      phone,
+      email,
+      currentMode,
+      account} = values;
     if (password !== confirmPassword) {
       toast.error(
         "Password and confirm password should be same.",
         toastOptions
       );
       return false;
-    } else if (username.length < 3) {
+    } else if (firstName.length < 3) {
       toast.error(
-        "Username should be greater than 3 characters.",
+        "First Name should be greater than 3 characters.",
         toastOptions
       );
       return false;
-    } else if (password.length < 8) {
+    }else if(lastName.length < 3){
       toast.error(
-        "Password should be equal or greater than 8 characters.",
+        "Last Name should be greater than 3 characters.",
+        toastOptions
+      );
+      return false;
+    } else if (password.length < 4) {
+      toast.error(
+        "Password should be equal or greater than 4 characters.",
         toastOptions
       );
       return false;
     } else if (email === "") {
       toast.error("Email is required.", toastOptions);
       return false;
+    }else if (phone === "") {
+      toast.error("Phone Number is required.", toastOptions);
+      return false;
+    }else if (currentMode === "") {
+      toast.error("currentMode  is required.", toastOptions);
+      return false;
     }
-
+    else if (account === "") {
+      toast.error("account is required.", toastOptions);
+      return false}
     return true;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      const { email, username, password } = values;
+      const { firstName,
+      lastName,
+      phone,
+      email,
+      password,
+      currentMode,
+      account,
+         } = values;
       const { data } = await axios.post(registerRoute, {
-        username,
+        firstName,
+        lastName,
+        phone,
         email,
         password,
+        currentMode,
+        account,
       });
 
       if (data.status === false) {
@@ -87,21 +125,54 @@ export default function Register() {
   return (
     <>
       <FormContainer>
-        <form action="" onSubmit={(event) => handleSubmit(event)}>
+        <form
+          action=""
+          onSubmit={(event) => handleSubmit(event)}
+          style={{ overflow: "overlay" }}
+        >
           <div className="brand">
             <img src={Logo} alt="logo" />
             <h1>snappy</h1>
           </div>
           <input
             type="text"
-            placeholder="Username"
-            name="username"
+            placeholder="firstName"
+            name="firstName"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="text"
+            placeholder="lastName"
+            name="lastName"
             onChange={(e) => handleChange(e)}
           />
           <input
             type="email"
             placeholder="Email"
             name="email"
+            onChange={(e) => handleChange(e)}
+          />
+          <select name="currentMode" 
+          onChange={(e) => handleChange(e)}>
+            <option value="" disabled selected >Select Mode</option>
+            <option value="passenger">Passenger</option>
+            <option value="driver">Driver</option>
+          </select>
+          <select name="account" onChange={(e) => handleChange(e)}>
+          <option value="" disabled selected >Select Account</option>
+            <option value="personal">Personal</option>
+            <option value="business">Business</option>
+          </select>
+          <input
+            type="text"
+            placeholder="phone"
+            name="phone"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="text"
+            placeholder="account"
+            name="account"
             onChange={(e) => handleChange(e)}
           />
           <input
@@ -133,6 +204,7 @@ const FormContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
   gap: 1rem;
   align-items: center;
   background-color: #131324;
@@ -168,6 +240,32 @@ const FormContainer = styled.div`
     font-size: 1rem;
     &:focus {
       border: 0.1rem solid #997af0;
+      outline: none;
+    }
+  }
+  select {
+    background-color: transparent;
+    padding: 1rem;
+    border: 0.1rem solid #4e0eff;
+    border-radius: 0.4rem;
+    color: white;
+    width: 100%;
+    font-size: 1rem;
+    &:focus {
+      border: 0.1rem solid #997af0;
+      outline: none;
+    }
+  }
+  option {
+    background-color: black;
+    padding: 1rem;
+    border: 0.1rem solid #4e0eff;
+    border-radius: 0.4rem;
+    color: white;
+    width: 100%;
+    font-size: 1rem;
+    &:focus {
+      border: 0.1rem solid red;
       outline: none;
     }
   }

@@ -27,15 +27,47 @@ export default function Chat() {
   }, []);
   useEffect(() => {
     if (currentUser) {
+
+
+      var lat = (Math.random()).toFixed(5);
+      var lng = (Math.random()).toFixed(5);
+
+      var data={
+        lat,
+        lng,
+        userId:currentUser._id,
+        userName:currentUser.username
+      }
+
       socket.current = io(host);
-      socket.current.emit("add-user", currentUser._id);
+      socket.current.emit("add-user", data);
+    }
+  }, [currentUser]);
+  useEffect(() => {
+    if (currentUser) {
+
+
+      var lat = (Math.random()*100).toFixed(5);
+      var lng = (Math.random()*100).toFixed(5);
+
+      var data={
+        lat,
+        lng,
+        userId:currentUser._id,
+        userName:currentUser.username
+      }
+
+      socket.current = io(host);
+      socket.current.emit("add-user", data);
     }
   }, [currentUser]);
 
   useEffect(async () => {
     if (currentUser) {
       if (currentUser.isAvatarImageSet) {
+        debugger
         const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+        debugger
         setContacts(data.data);
       } else {
         navigate("/setAvatar");
