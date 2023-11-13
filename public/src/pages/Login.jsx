@@ -47,7 +47,7 @@ export default function Login() {
         phone,
         password,
       });
-      debugger
+      // debugger
       if (res.status === 500) {
         toast.error(res.data.error, toastOptions);
       }
@@ -58,7 +58,7 @@ export default function Login() {
           JSON.stringify(res.data.user)
         );
 
-        navigate("/");
+        navigate("/Input");
       }
     }
   };

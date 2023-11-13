@@ -34,20 +34,20 @@ export default function Register() {
   }, []);
 
   const handleChange = (event) => {
-    debugger;
+    // debugger;
     setValues({ ...values, [event.target.name]: event.target.value });
   };
 
   const handleValidation = () => {
-    const { 
-      password, 
+    const {
+      password,
       confirmPassword,
       firstName,
       lastName,
       phone,
       email,
       currentMode,
-      account} = values;
+      account } = values;
     if (password !== confirmPassword) {
       toast.error(
         "Password and confirm password should be same.",
@@ -60,7 +60,7 @@ export default function Register() {
         toastOptions
       );
       return false;
-    }else if(lastName.length < 3){
+    } else if (lastName.length < 3) {
       toast.error(
         "Last Name should be greater than 3 characters.",
         toastOptions
@@ -75,36 +75,40 @@ export default function Register() {
     } else if (email === "") {
       toast.error("Email is required.", toastOptions);
       return false;
-    }else if (phone === "") {
+    } else if (phone === "") {
       toast.error("Phone Number is required.", toastOptions);
       return false;
-    }else if (currentMode === "") {
+    } else if (currentMode === "") {
       toast.error("currentMode  is required.", toastOptions);
       return false;
     }
     else if (account === "") {
       toast.error("account is required.", toastOptions);
-      return false}
+      return false
+    }
     return true;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      const { firstName,
-      lastName,
-      phone,
-      email,
-      password,
-      currentMode,
-      account,
-         } = values;
-      const { data } = await axios.post(registerRoute, {
+      const { password,
         firstName,
         lastName,
         phone,
         email,
+        currentMode,
+        account,
+      } = values;
+
+      console.log(values)
+      debugger
+      const { data } = await axios.post(registerRoute, {
         password,
+        firstName,
+        lastName,
+        phone,
+        email,
         currentMode,
         account,
       });
@@ -152,14 +156,14 @@ export default function Register() {
             name="email"
             onChange={(e) => handleChange(e)}
           />
-          <select name="currentMode" 
-          onChange={(e) => handleChange(e)}>
+          <select name="currentMode"
+            onChange={(e) => handleChange(e)}>
             <option value="" disabled selected >Select Mode</option>
             <option value="passenger">Passenger</option>
             <option value="driver">Driver</option>
           </select>
           <select name="account" onChange={(e) => handleChange(e)}>
-          <option value="" disabled selected >Select Account</option>
+            <option value="" disabled selected >Select Account</option>
             <option value="personal">Personal</option>
             <option value="business">Business</option>
           </select>
@@ -169,12 +173,7 @@ export default function Register() {
             name="phone"
             onChange={(e) => handleChange(e)}
           />
-          <input
-            type="text"
-            placeholder="account"
-            name="account"
-            onChange={(e) => handleChange(e)}
-          />
+
           <input
             type="password"
             placeholder="Password"
