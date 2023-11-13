@@ -55,6 +55,7 @@ export default function Chat() {
         lng,
         userId:currentUser._id,
         firstName:currentUser.firstName,
+        currentMode:currentUser.currentMode,
       }
 
       socket.current = io(host);
