@@ -36,7 +36,7 @@ export default function Chat() {
         lat,
         lng,
         userId:currentUser._id,
-        userName:currentUser.username
+        firstName:currentUser.firstName,
       }
 
       socket.current = io(host);
@@ -54,7 +54,7 @@ export default function Chat() {
         lat,
         lng,
         userId:currentUser._id,
-        userName:currentUser.username
+        firstName:currentUser.firstName,
       }
 
       socket.current = io(host);
