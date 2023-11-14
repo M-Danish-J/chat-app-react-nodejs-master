@@ -15,6 +15,7 @@ export default function Chat() {
   const [currentChat, setCurrentChat] = useState(undefined);
   const [currentUser, setCurrentUser] = useState(undefined);
   useEffect(async () => {
+    debugger
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
       navigate("/login");
     } else {
@@ -26,6 +27,7 @@ export default function Chat() {
     }
   }, []);
   useEffect(() => {
+    debugger
     if (currentUser) {
       debugger
       var lat = (Math.random()).toFixed(5);

@@ -4,6 +4,7 @@ import Robot from "../assets/robot.gif";
 export default function Welcome() {
   const [phone, setphone] = useState("");
   useEffect(async () => {
+    debugger
     setphone(
       await JSON.parse(
         localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)

@@ -103,7 +103,7 @@ export default function Register() {
 
       console.log(values)
       debugger
-      const { data } = await axios.post(registerRoute, {
+      const data  = await axios.post(registerRoute, {
         password,
         firstName,
         lastName,
@@ -112,16 +112,17 @@ export default function Register() {
         currentMode,
         account,
       });
-
-      if (data.status === false) {
+      debugger
+      if (data.status === 500) {
         toast.error(data.msg, toastOptions);
       }
-      if (data.status === true) {
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
-        );
-        navigate("/");
+      if (data.status === 200) {
+        toast.success(data.msg, toastOptions);
+        // localStorage.setItem(
+        //   process.env.REACT_APP_LOCALHOST_KEY,
+        //   JSON.stringify(data.user)
+        // );
+        navigate("/confirmRegOTP");
       }
     }
   };

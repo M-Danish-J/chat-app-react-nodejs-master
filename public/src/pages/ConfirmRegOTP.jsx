@@ -5,68 +5,64 @@ import { useNavigate, Link } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { loginRoute } from "../utils/APIRoutes";
+import { confirmRegOTP } from "../utils/APIRoutes";
 
-export default function Login() {
-  const navigate = useNavigate();
-  const [values, setValues] = useState({ phone: "", password: "" });
-  const toastOptions = {
-    position: "bottom-right",
-    autoClose: 8000,
-    pauseOnHover: true,
-    draggable: true,
-    theme: "dark",
-  };
-  useEffect(() => {
-    if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-      navigate("/");
-    }
-  }, []);
+const ConfirmRegOTP = () => {
+    const navigate = useNavigate();
+    const [values, setValues] = useState({ phone: "", OneTimePassword: "" });
+    const toastOptions = {
+      position: "bottom-right",
+      autoClose: 8000,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "dark",
+    };
 
-  const handleChange = (event) => {
-    setValues({ ...values, [event.target.name]: event.target.value });
-  };
-
-  const validateForm = () => {
-    const { phone, password } = values;
-    if (phone === "") {
-      toast.error("Email and Password is required.", toastOptions);
-      return false;
-    } else if (password === "") {
-      toast.error("Email and Password is required.", toastOptions);
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (validateForm()) {
-      const { phone, password } = values;
-      const res = await axios.post(loginRoute, {
-        phone,
-        password,
-      });
-      // debugger
-      if (res.status === 500) {
-        toast.error(res.data.error, toastOptions);
-      }
-      if (res.status === 200) {
-        toast.error(res.data.message, toastOptions);
-        localStorage.setItem(
-          process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(res.data.user)
-        );
-
-        // navigate("/Input");
-        navigate("/");
-      }
-    }
-  };
-
+    const handleChange = (event) => {
+        setValues({ ...values, [event.target.name]: event.target.value });
+      };
+    
+      const validateForm = () => {
+        const { phone, OneTimePassword } = values;
+        if (phone === "") {
+          toast.error("phone and OneTimePassword is required.", toastOptions);
+          return false;
+        } else if (OneTimePassword === "") {
+          toast.error("phone and OneTimePassword is required.", toastOptions);
+          return false;
+        }
+        return true;
+      };
+    
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+        if (validateForm()) {
+            debugger
+          const { phone, OneTimePassword } = values;
+          const res = await axios.post(confirmRegOTP, {
+            phone,
+            OneTimePassword,
+          });
+          console.log(res)
+          debugger
+          if (!res.data.success) {
+            toast.error(res.data.error, toastOptions);
+          }else
+          if (res.data.success) {
+            toast.error(res.data.message, toastOptions);
+            localStorage.setItem(
+              process.env.REACT_APP_LOCALHOST_KEY,
+              JSON.stringify(res.data.user)
+            );
+    
+            // navigate("/Input");
+            navigate("/");
+          }
+        }
+      };
   return (
-    <>
-      <FormContainer>
+    <div>
+       <FormContainer>
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
             <img src={Logo} alt="logo" />
@@ -74,28 +70,29 @@ export default function Login() {
           </div>
           <input
             type="text"
-            placeholder="phone"
+            placeholder="Phone"
             name="phone"
             onChange={(e) => handleChange(e)}
             min="3"
           />
           <input
-            type="password"
-            placeholder="Password"
-            name="password"
+            type="text"
+            placeholder="OneTimePassword"
+            name="OneTimePassword"
             onChange={(e) => handleChange(e)}
           />
-          <button type="submit">Log In</button>
+          <button type="submit">Submit</button>
           <span>
-            Don't have an account ? <Link to="/register">Create One.</Link>
+            Don't recived OTP ? <Link to="/register">Resend OTP.</Link>
           </span>
         </form>
       </FormContainer>
       <ToastContainer />
-    </>
-  );
+    </div>
+  )
 }
 
+export default ConfirmRegOTP
 const FormContainer = styled.div`
   height: 100vh;
   width: 100vw;

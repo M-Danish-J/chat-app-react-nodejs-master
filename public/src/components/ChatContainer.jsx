@@ -55,11 +55,12 @@ export default function ChatContainer({ currentChat, socket }) {
 
   useEffect(() => {
     if (socket.current) {
+
       socket.current.on("msg-recieve", (msg) => {
         setArrivalMessage({ fromSelf: false, message: msg });
       });
     }
-  }, []);
+  }, [socket, setArrivalMessage]);
 
   useEffect(() => {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
