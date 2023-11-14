@@ -9,7 +9,7 @@ import { getAvailableDriversRoute } from "../utils/APIRoutes";
 
 export default function Input() {
     const navigate = useNavigate();
-    const [values, setValues] = useState({ lat: "", long: "", categoryId: "" });
+    const [values, setValues] = useState({ sourceLat: "", sourceLng: "",destinationLat: "", destinationLng: "", categoryId: "" });
     const toastOptions = {
         position: "bottom-right",
         autoClose: 8000,
