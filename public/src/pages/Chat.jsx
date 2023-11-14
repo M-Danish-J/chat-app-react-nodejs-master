@@ -1,15 +1,26 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import styled from "styled-components";
-import { allUsersRoute, host } from "../utils/APIRoutes";
+import { host } from "../utils/APIRoutes";
 import ChatContainer from "../components/ChatContainer";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 
 export default function Chat() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Access the state from the location object
+    const stateFromNavigate = location?.state;
+    debugger
+    setContacts(stateFromNavigate);
+    console.log('State from navigate:', stateFromNavigate);
+
+    // Your other code here
+  }, [location]);
   const socket = useRef();
   const [contacts, setContacts] = useState([]);
   const [currentChat, setCurrentChat] = useState(undefined);
@@ -32,11 +43,11 @@ export default function Chat() {
       var lat = (Math.random()).toFixed(5);
       var lng = (Math.random()).toFixed(5);
 
-      var data={
+      var data = {
         lat,
         lng,
-        userId:currentUser._id,
-        firstName:currentUser.firstName,
+        userId: currentUser._id,
+        firstName: currentUser.firstName,
       }
 
       socket.current = io(host);
@@ -47,15 +58,15 @@ export default function Chat() {
     if (currentUser) {
 
 
-      var lat = (Math.random()*100).toFixed(5);
-      var lng = (Math.random()*100).toFixed(5);
+      var lat = (Math.random() * 100).toFixed(5);
+      var lng = (Math.random() * 100).toFixed(5);
 
-      var data={
+      var data = {
         lat,
         lng,
-        userId:currentUser._id,
-        firstName:currentUser.firstName,
-        currentMode:currentUser.currentMode,
+        userId: currentUser._id,
+        firstName: currentUser.firstName,
+        currentMode: currentUser.currentMode,
       }
 
       socket.current = io(host);
@@ -66,10 +77,10 @@ export default function Chat() {
   useEffect(async () => {
     if (currentUser) {
       if (currentUser.isAvatarImageSet) {
-        debugger
-        const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
-        debugger
-        setContacts(data.data);
+        // debugger
+        // const data = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+        // debugger
+        // setContacts(data.data);
       } else {
         navigate("/setAvatar");
       }

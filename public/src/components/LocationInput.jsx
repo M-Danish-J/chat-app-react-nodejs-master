@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";  // Import useNavigate
+import { useNavigate } from "react-router-dom";
+
 
 const LocationInput = ({ userToken }) => {
-  const navigate = useNavigate();  // Use useNavigate hook
+  const navigate = useNavigate();
   const [locationValues, setLocationValues] = useState({
-    latitude: "",
-    longitude: "",
+    sourceLatitude: "",
+    sourceLongitude: "",
+    destinationLatitude: "",
+    destinationLongitude: "",
     categoryId: "",
   });
 
@@ -19,22 +22,28 @@ const LocationInput = ({ userToken }) => {
 
   const handleLocationSubmit = async (event) => {
     event.preventDefault();
-
-    if (!locationValues.latitude || !locationValues.longitude || !locationValues.categoryId) {
+debugger
+    if (
+      !locationValues.sourceLatitude ||
+      !locationValues.sourceLongitude ||
+      !locationValues.destinationLatitude ||
+      !locationValues.destinationLongitude ||
+      !locationValues.categoryId
+    ) {
       alert("Please fill in all fields.");
       return;
     }
 
     try {
-      // Assuming successful submission
-      // Save the location data in local storage
-      localStorage.setItem("locationData", JSON.stringify(locationValues));
+      const response = await axios.get(`http://localhost:5001/availableDrivers?sourceLat=${locationValues.sourceLatitude}&sourceLong=${locationValues.sourceLongitude}&destinationLat=${locationValues.destinationLatitude}&destinationLong=${locationValues.destinationLongitude}&categoryId=${locationValues.categoryId}`);
+      console.log(response);
+    // Extract the relevant data from the response
+    const responseData = response.data.formattedAvailableDrivers;
 
-      // Navigate to the default "/" route
-      navigate("/");
+    // Pass only the necessary data in the state
+    navigate('/', { state: responseData });
     } catch (error) {
-      console.error("Error saving location data:", error);
-      alert("An error occurred while saving location data. Please try again later.");
+      console.log( error);
     }
   };
 
@@ -44,15 +53,29 @@ const LocationInput = ({ userToken }) => {
         <h2 style={{ color: "black" }}>Enter Location Data</h2>
         <input
           type="text"
-          placeholder="Latitude"
-          name="latitude"
+          placeholder="Source Latitude"
+          name="sourceLatitude"
           onChange={handleLocationChange}
           style={{ marginBottom: "10px", padding: "8px", width: "100%" }}
         />
         <input
           type="text"
-          placeholder="Longitude"
-          name="longitude"
+          placeholder="Source Longitude"
+          name="sourceLongitude"
+          onChange={handleLocationChange}
+          style={{ marginBottom: "10px", padding: "8px", width: "100%" }}
+        />
+        <input
+          type="text"
+          placeholder="Destination Latitude"
+          name="destinationLatitude"
+          onChange={handleLocationChange}
+          style={{ marginBottom: "10px", padding: "8px", width: "100%" }}
+        />
+        <input
+          type="text"
+          placeholder="Destination Longitude"
+          name="destinationLongitude"
           onChange={handleLocationChange}
           style={{ marginBottom: "10px", padding: "8px", width: "100%" }}
         />
