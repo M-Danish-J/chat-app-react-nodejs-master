@@ -8,102 +8,102 @@ import "react-toastify/dist/ReactToastify.css";
 import { getAvailableDriversRoute } from "../utils/APIRoutes";
 
 export default function Input() {
-    const navigate = useNavigate();
-    const [values, setValues] = useState({ sourceLat: "", sourceLng: "",destinationLat: "", destinationLng: "", categoryId: "" });
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 8000,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-    };
-    // useEffect(() => {
-    //     if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-    //         navigate("/");
-    //     }
-    // }, []);
+  const navigate = useNavigate();
+  const [values, setValues] = useState({ sourceLat: "", sourceLng: "", destinationLat: "", destinationLng: "", categoryId: "" });
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 8000,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
+  // useEffect(() => {
+  //     if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+  //         navigate("/");
+  //     }
+  // }, []);
 
-    const handleChange = (event) => {
-        setValues({ ...values, [event.target.name]: event.target.value });
-    };
+  const handleChange = (event) => {
+    setValues({ ...values, [event.target.name]: event.target.value });
+  };
 
-    const validateForm = () => {
-        const { lat, long, categoryId } = values;
-        if (lat === "") {
-            toast.error("lat and long is required.", toastOptions);
-            return false;
-        } else if (long === "") {
-            toast.error("lat and long is required.", toastOptions);
-            return false;
-        } else if (categoryId === "") {
-            toast.error("categoryId is required.", toastOptions);
-            return false;
+  const validateForm = () => {
+    const { lat, long, categoryId } = values;
+    if (lat === "") {
+      toast.error("lat and long is required.", toastOptions);
+      return false;
+    } else if (long === "") {
+      toast.error("lat and long is required.", toastOptions);
+      return false;
+    } else if (categoryId === "") {
+      toast.error("categoryId is required.", toastOptions);
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (validateForm()) {
+      const { lat, long, categoryId } = values;
+      const urlWithParams = `${getAvailableDriversRoute}?passengerLat=${lat}&passengerLong=${long}&categoryId=${categoryId}`;
+
+      try {
+        const res = await axios.get(urlWithParams);
+        // debugger;
+        console.log("aaa");
+        if (res.status === 500) {
+          toast.error(res.data.error, toastOptions);
         }
-        return true;
-    };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        if (validateForm()) {
-            const { lat, long, categoryId } = values;
-            const urlWithParams = `${getAvailableDriversRoute}?passengerLat=${lat}&passengerLong=${long}&categoryId=${categoryId}`;
-
-            try {
-                const res = await axios.get(urlWithParams);
-                // debugger;
-                console.log("aaa");
-                if (res.status === 500) {
-                    toast.error(res.data.error, toastOptions);
-                }
-
-                if (res.status === 200) {
-                    toast.error(res.data.message, toastOptions);
-                    localStorage.setItem(
-                        "AllDrivers",
-                        JSON.stringify(res.data)
-                    );
-                    // navigate("/");
-                }
-            } catch (error) {
-                // Handle error
-                console.error("Error:", error);
-            }
+        if (res.status === 200) {
+          toast.error(res.data.message, toastOptions);
+          localStorage.setItem(
+            "AllDrivers",
+            JSON.stringify(res.data)
+          );
+          navigate("/");
         }
-    };
+      } catch (error) {
+        // Handle error
+        console.error("Error:", error);
+      }
+    }
+  };
 
 
-    return (
-        <>
-            <FormContainer>
-                <form action="" onSubmit={(event) => handleSubmit(event)}>
-                    <div className="brand">
-                        <img src={Logo} alt="logo" />
-                        <h1>Inputs</h1>
-                    </div>
-                    <input
-                        type="text"
-                        placeholder="Passenger Lat"
-                        name="lat"
-                        onChange={(e) => handleChange(e)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Passenger Long"
-                        name="long"
-                        onChange={(e) => handleChange(e)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Category Id"
-                        name="categoryId"
-                        onChange={(e) => handleChange(e)}
-                    />
-                    <button type="submit">Submit</button>
-                </form>
-            </FormContainer>
-            <ToastContainer />
-        </>
-    );
+  return (
+    <>
+      <FormContainer>
+        <form action="" onSubmit={(event) => handleSubmit(event)}>
+          <div className="brand">
+            <img src={Logo} alt="logo" />
+            <h1>Inputs</h1>
+          </div>
+          <input
+            type="text"
+            placeholder="Passenger Lat"
+            name="lat"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="text"
+            placeholder="Passenger Long"
+            name="long"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="text"
+            placeholder="Category Id"
+            name="categoryId"
+            onChange={(e) => handleChange(e)}
+          />
+          <button type="submit">Submit</button>
+        </form>
+      </FormContainer>
+      <ToastContainer />
+    </>
+  );
 }
 
 const FormContainer = styled.div`

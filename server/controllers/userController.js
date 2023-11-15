@@ -1,16 +1,18 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-
+import { useNavigate } from "react-router-dom";
 module.exports.login = async (req, res, next) => {
+  navigate = useNavigate()
   try {
-    const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const { phone, password } = req.body;
+    const user = await User.findOne({ phone });
     if (!user)
       return res.json({ msg: "Incorrect Username or Password", status: false });
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid)
       return res.json({ msg: "Incorrect Username or Password", status: false });
     delete user.password;
+    navigate("/Input")
     return res.json({ status: true, user });
   } catch (ex) {
     next(ex);

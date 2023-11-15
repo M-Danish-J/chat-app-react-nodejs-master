@@ -58,8 +58,8 @@ export default function Login() {
           JSON.stringify(res.data.user)
         );
 
-        // navigate("/Input");
-        navigate("/");
+        navigate("/Input");
+        // navigate("/");
       }
     }
   };

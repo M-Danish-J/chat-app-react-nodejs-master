@@ -36,24 +36,24 @@ export default function Chat() {
       );
     }
   }, []);
-  useEffect(() => {
-    if (currentUser) {
+  // useEffect(() => {
+  //   if (currentUser) {
 
 
-      var lat = (Math.random()).toFixed(5);
-      var lng = (Math.random()).toFixed(5);
+  //     var lat = (Math.random()).toFixed(5);
+  //     var lng = (Math.random()).toFixed(5);
 
-      var data = {
-        lat,
-        lng,
-        userId: currentUser._id,
-        firstName: currentUser.firstName,
-      }
+  //     var data = {
+  //       lat,
+  //       lng,
+  //       userId: currentUser._id,
+  //       firstName: currentUser.firstName,
+  //     }
 
-      socket.current = io(host);
-      socket.current.emit("add-user", data);
-    }
-  }, [currentUser]);
+  //     socket.current = io(host);
+  //     socket.current.emit("add-user", data);
+  //   }
+  // }, [currentUser]);
   useEffect(() => {
     if (currentUser) {
 

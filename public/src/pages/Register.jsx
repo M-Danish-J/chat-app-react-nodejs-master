@@ -103,7 +103,7 @@ export default function Register() {
 
       console.log(values)
       debugger
-      const data  = await axios.post(registerRoute, {
+      const data = await axios.post(registerRoute, {
         password,
         firstName,
         lastName,
