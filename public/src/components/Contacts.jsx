@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Logo from "../assets/logo.svg";
 
 export default function Contacts({ contacts, changeChat }) {
+  debugger
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
@@ -10,10 +11,15 @@ export default function Contacts({ contacts, changeChat }) {
     const data = await JSON.parse(
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
     );
-    setCurrentUserName(data.username);
+    
+    if(data){
+      debugger
+      setCurrentUserName(data.firstName);
     setCurrentUserImage(data.avatarImage);
+    }
   }, []);
   const changeCurrentChat = (index, contact) => {
+    debugger
     setCurrentSelected(index);
     changeChat(contact);
   };
@@ -26,7 +32,8 @@ export default function Contacts({ contacts, changeChat }) {
             <h3>snappy</h3>
           </div>
           <div className="contacts">
-            {contacts.map((contact, index) => {
+            {contacts.length && contacts?.map((contact, index) => {
+              debugger
               return (
                 <div
                   key={contact._id}
@@ -42,7 +49,7 @@ export default function Contacts({ contacts, changeChat }) {
                     />
                   </div>
                   <div className="username">
-                    <h3>{contact.username}</h3>
+                    <h3>{contact.firstName}</h3>
                   </div>
                 </div>
               );

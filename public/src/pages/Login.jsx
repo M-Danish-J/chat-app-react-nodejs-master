@@ -9,7 +9,7 @@ import { loginRoute } from "../utils/APIRoutes";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [values, setValues] = useState({ username: "", password: "" });
+  const [values, setValues] = useState({ phone: "", password: "" });
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -28,8 +28,8 @@ export default function Login() {
   };
 
   const validateForm = () => {
-    const { username, password } = values;
-    if (username === "") {
+    const { phone, password } = values;
+    if (phone === "") {
       toast.error("Email and Password is required.", toastOptions);
       return false;
     } else if (password === "") {
@@ -42,21 +42,23 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
-      const { username, password } = values;
-      const { data } = await axios.post(loginRoute, {
-        username,
+      const { phone, password } = values;
+      const res = await axios.post(loginRoute, {
+        phone,
         password,
       });
-      if (data.status === false) {
-        toast.error(data.msg, toastOptions);
+      debugger
+      if (res.status === 500) {
+        toast.error(res.data.error, toastOptions);
       }
-      if (data.status === true) {
+      if (res.status === 200) {
+        toast.error(res.data.message, toastOptions);
         localStorage.setItem(
           process.env.REACT_APP_LOCALHOST_KEY,
-          JSON.stringify(data.user)
+          JSON.stringify(res.data.user)
         );
 
-        navigate("/");
+        navigate("/input");
       }
     }
   };
@@ -71,8 +73,8 @@ export default function Login() {
           </div>
           <input
             type="text"
-            placeholder="Username"
-            name="username"
+            placeholder="phone"
+            name="phone"
             onChange={(e) => handleChange(e)}
             min="3"
           />
